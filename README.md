@@ -25,3 +25,6 @@ backend:
 - npm install -D @types/cors
 
 # TO RUN: 
+backend:
+- cd /backend/src
+- npm run dev
