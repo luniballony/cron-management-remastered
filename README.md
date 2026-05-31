@@ -28,3 +28,7 @@ backend:
 backend:
 - cd /backend/src
 - npm run dev
+
+# GOALS
+- allow creation, edition, deletion and view the created crons
+- 

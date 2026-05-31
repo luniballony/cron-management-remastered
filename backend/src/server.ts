@@ -1,1 +1,9 @@
-console.log("CRON MANAGEMENT REMASTERED");
+import express from "express";
+
+const app = express();
+app.listen(3000);
+
+app.get("/", (req, res) => {
+  res.send("This is the Cron Management Remastered Backend.")
+})
+
