@@ -13,7 +13,7 @@ Frontend:
 
 # INSTALATION:
 simply run:
-- npm install
+-  
 
 or install packages seperately: 
 backend:
@@ -28,6 +28,10 @@ backend:
 backend:
 - cd /backend/src
 - npm run dev
+
+production mode (no auto reload, doesnt watch for file changes)
+npm run build
+npm start
 
 # GOALS
 - allow creation, edition, deletion and view the created crons
