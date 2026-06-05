@@ -1,12 +1,32 @@
+import dotenv from "dotenv";
 import express from "express";
 import cron from "node-cron";
+import cors from "cors";
+import {bd} from "./db";
+
+dotenv.config();
 
 const app = express();
-app.listen(3000);
+app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("This is the Cron Management Remastered Backend.")
 })
+
+app.get("/cron-job", async(req, res) => {
+  try{
+    const result = await bd.query(
+      "SELECT * FROM cron_job");
+
+      res.json(result.rows);
+      console.log("Connected to cron job table")
+    } catch(err) {
+      console.error(err);
+      res.status(500).json({error : "Unable to connect to Cron-Job table"})
+    }
+})
+
 
 // allows to view a cron
 app.get("/view/:id", (req, res) => {
@@ -19,7 +39,9 @@ cron.schedule("* * * * *", async () => {
     console.log("Runs every minute");
 });
 
-console.log("sup");
-console.log("j");
+
+app.listen(3000);
+
+
 
 
