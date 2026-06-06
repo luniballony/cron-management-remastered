@@ -35,10 +35,54 @@ app.get("/view/:id", (req, res) => {
 })
 
 
-cron.schedule("* * * * *", async () => {
-    console.log("Runs every minute");
-});
+// cron job template
+// cron.schedule("* * * * *", async () => {
+//     console.log("Runs every minute");
+// });
 
+
+// function to create a new job
+function createJob (id : number, schedule : string) {
+  console.log("entered createJob")
+  try {
+    cron.schedule(schedule, async () => {
+        console.log(`Cron Job ${id} - executed every ${schedule}`);
+    });
+  } catch (err) {
+    console.error({error: "failed at creating a job.", err})
+  }
+  //console.log("end of createJob function")
+}
+
+// basic function to add job to db & to start it
+async function addJob (uri : string, method : string, schedule : string, timezone : string, body? : string) {
+  if (!body){
+    const result = await bd.query(
+      "INSERT INTO cron_job (uri,http_method, schedule, timezone) VALUES ($1, $2, $3, $4)",
+      [uri, method, schedule, timezone]);
+
+    if(!result) {
+      console.log("Error at adding a new job to the db");
+    }}
+    
+  else {
+    const result = await bd.query(
+    "INSERT INTO cron_job (uri,http_method, schedule, timezone, body) VALUES ($1, $2, $3, $4, $5)",
+    [uri, method, schedule, timezone, body]);
+
+    if(!result) {
+      console.log("Error at adding a new job to the db");
+    }
+  }
+
+  const id = 1;
+  // activates job
+  createJob(id, schedule);
+  console.log("added new job to db")
+}
+
+
+addJob('https://bazaar-genie.netlify.app/', 'GET', '*/5 * * * * *', 'NULL-TEST');
 
 app.listen(3000);
 
