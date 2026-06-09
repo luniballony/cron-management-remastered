@@ -5,11 +5,12 @@ import {db} from "./db";
 // function to create a new singular job
 export function createNewJob (id : number, schedule : string) {
   try {
+    console.log(`Starting job ${id}`)
     cron.schedule(schedule, async () => {
         console.log(`Cron Job ${id} - executed every ${schedule}`);
     });
   } catch (err) {
-    console.error({error: "failed at creating a job.", err})
+    console.error({error: `failed at creating a job with id ${id}`, err})
   }
 }
 
@@ -50,12 +51,28 @@ export async function activateAllJob () {
         );
 
         for (const job of result.rows) {
-            console.log(`Starting job ${job.id}`)
             createNewJob(job.id, job.schedule);
         }
 
         console.log(`Activated ${result.rows.length} jobs`);
     } catch (err) {
-        console.error({error: `Oh no, error at activating all j9bs: ${err}`});
+        console.error({error: `Oh no, error at activating all jobs: ${err}`});
     }
 }
+
+
+// function to edit a job 
+// currently updates all sections, even if they are the same
+export async function editJob(id : number, uri? : string, httpMethod? : string, body? : string, schedule? : string, timezone? : string  ) {
+    try {
+        const result =  await db.query (
+            "UPDATE cron_job SET uri = $2, http_method = $3, body = $4, schedule = $5, timezone = $6, updated_at = NOW() WHERE id = $1",
+            [id, uri, httpMethod, body, schedule, timezone]
+        );
+
+        console.log(`Updated cron job with id ${id}`);
+    } catch (err) {
+        console.error({error: `Oh no, error while editing job with id ${id}: ${err}`});
+    }
+}
+
