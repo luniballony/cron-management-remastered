@@ -70,6 +70,11 @@ export async function editJob(id : number, uri? : string, httpMethod? : string, 
             [id, uri, httpMethod, body, schedule, timezone]
         );
 
+        if (result.rowCount === 0) {
+            console.log(`Couldnt edit job with id ${id}.`)
+            return;
+        }
+
         console.log(`Updated cron job with id ${id}`);
     } catch (err) {
         console.error({error: `Oh no, error while editing job with id: ${id} - ${err}`});
@@ -85,9 +90,10 @@ export async function deleteJob (id : number) {
 
         if (result.rowCount === 0) {
             console.log(`Couldnt delete job with id ${id} because it couldnt be found in the database`)
-        } else {
-            console.log(`Deleted cron job with id: ${id}`);
-        }
+            return;
+        } 
+        
+        console.log(`Deleted cron job with id: ${id}`);
         
     } catch(err) {
         console.error({error: `Error at deleting job with id: ${id} - ${err}`})
@@ -105,7 +111,7 @@ export async function searchJob(id : number) {
             console.log(`Couldnt find job with id: ${id}`);
             return;
         } 
-        
+
         return(result.rows[0]);
     } catch (err) {
         console.error({error : `Error at finding cron job with id: ${id} - ${err}`})
