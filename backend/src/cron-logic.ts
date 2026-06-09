@@ -72,7 +72,42 @@ export async function editJob(id : number, uri? : string, httpMethod? : string, 
 
         console.log(`Updated cron job with id ${id}`);
     } catch (err) {
-        console.error({error: `Oh no, error while editing job with id ${id}: ${err}`});
+        console.error({error: `Oh no, error while editing job with id: ${id} - ${err}`});
     }
 }
 
+export async function deleteJob (id : number) {
+    try {
+        const result = await db.query(
+            "DELETE FROM cron_job WHERE id = $1",
+            [id]
+        );
+
+        if (result.rowCount === 0) {
+            console.log(`Couldnt delete job with id ${id} because it couldnt be found in the database`)
+        } else {
+            console.log(`Deleted cron job with id: ${id}`);
+        }
+        
+    } catch(err) {
+        console.error({error: `Error at deleting job with id: ${id} - ${err}`})
+    }
+}
+
+// function to fetch specific job
+export async function searchJob(id : number) {
+    try {
+        const result =  await db.query(
+            "SELECT * FROM cron_job WHERE id = $1",
+            [id]
+        )
+        if(result.rows.length === 0) {
+            console.log(`Couldnt find job with id: ${id}`);
+            return;
+        } 
+        
+        return(result.rows[0]);
+    } catch (err) {
+        console.error({error : `Error at finding cron job with id: ${id} - ${err}`})
+    }
+}

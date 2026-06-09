@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { addJob, activateAllJob, editJob} from "./cron-logic";
+import { addJob, activateAllJob, editJob, deleteJob, searchJob} from "./cron-logic";
 
 dotenv.config();
 
@@ -36,7 +36,7 @@ app.get("/view/:id", (req, res) => {
   res.send(`This is Cron Job with id: ${cronId} page`);
 })
 
-
+// TESTING SEGMENT
 // cron job template
 // cron.schedule("* * * * *", async () => {
 //     console.log("Runs every minute");
@@ -44,9 +44,9 @@ app.get("/view/:id", (req, res) => {
 
 
 //addJob('https://bazaar-genie.netlify.app/', 'GET', '*/5 * * * * *', 'NULL-TEST');
-activateAllJob();
+// activateAllJob();
 
-editJob(13, "http://www.stardoll.com", "POST", "NULL", "*/5 * * *", "NULL");
+//editJob(13, "http://www.stardoll.com", "POST", "NULL", "*/5 * * *", "NULL");
 
 app.listen(3000);
 
