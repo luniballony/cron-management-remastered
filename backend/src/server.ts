@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import {bd} from "./db";
-import { createJob, addJob} from "./cron-logic";
+import {db} from "./db";
+import { addJob, activateAllJob} from "./cron-logic";
 
 dotenv.config();
 
@@ -14,9 +14,10 @@ app.get("/", (req, res) => {
   res.send("This is the Cron Management Remastered Backend.")
 })
 
+// gets all cron jobs from db
 app.get("/cron-job", async(req, res) => {
   try{
-    const result = await bd.query(
+    const result = await db.query(
       "SELECT * FROM cron_job");
 
       res.json(result.rows);
@@ -29,6 +30,7 @@ app.get("/cron-job", async(req, res) => {
 
 
 // allows to view a cron
+// not yet fully developed
 app.get("/view/:id", (req, res) => {
   const cronId = req.params.id;
   res.send(`This is Cron Job with id: ${cronId} page`);
@@ -41,7 +43,8 @@ app.get("/view/:id", (req, res) => {
 // });
 
 
-addJob('https://bazaar-genie.netlify.app/', 'GET', '*/5 * * * * *', 'NULL-TEST');
+//addJob('https://bazaar-genie.netlify.app/', 'GET', '*/5 * * * * *', 'NULL-TEST');
+activateAllJob();
 
 app.listen(3000);
 

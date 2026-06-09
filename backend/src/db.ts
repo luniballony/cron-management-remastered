@@ -4,7 +4,7 @@ import {env} from "./env"
 
 const { Pool } = pg;
 
-export const bd = new Pool ({
+export const db = new Pool ({
     user : env.db.user,
     host : env.db.host,
     database : env.db.name,
