@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { addJob, activateAllJob, editJob, deleteJob, searchJob} from "./cron-logic";
+import { addJob, activateAllJob, editJob, deleteJob, searchJob, createNewJob} from "./cron-logic";
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 })
 
 // gets all cron jobs from db
-app.get("/cron-job", async(req, res) => {
+app.get("/view-all", async(req, res) => {
   try{
     const result = await db.query(
       "SELECT * FROM cron_job");
@@ -29,11 +29,25 @@ app.get("/cron-job", async(req, res) => {
 })
 
 
-// allows to view a cron
-// not yet fully developed
-app.get("/view/:id", (req, res) => {
-  const cronId = req.params.id;
-  res.send(`This is Cron Job with id: ${cronId} page`);
+// view a specific cron
+app.get("/view/:id", async (req, res) => {
+  const cronId = parseInt(req.params.id, 10);
+
+  if (isNaN(cronId)) {
+    return res.status(400).json({
+      error: "Invalid cron id"
+    });
+  }
+  
+  const result = await searchJob(cronId)
+  
+  if(!result) {
+    return res.status(404).json({
+      error: "couldnt find cron job with that id."
+    })
+  }
+  createNewJob(cronId, result.schedule);
+  return res.json(result);
 })
 
 // TESTING SEGMENT
@@ -45,8 +59,7 @@ app.get("/view/:id", (req, res) => {
 
 //addJob('https://bazaar-genie.netlify.app/', 'GET', '*/5 * * * * *', 'NULL-TEST');
 // activateAllJob();
-
-//editJob(13, "http://www.stardoll.com", "POST", "NULL", "*/5 * * *", "NULL");
+//editJob(18, "http://www.stardoll.com", "POST", "NULL", "*/5 * * *", "NULL");
 
 app.listen(3000);
 
