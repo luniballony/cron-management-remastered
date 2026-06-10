@@ -1,14 +1,24 @@
 import cron from "node-cron";
 import {db} from "./db";
-
+import { scheduledJobs } from "./scheduledJobs"
 
 // function to create a new singular job
 export function createNewJob (id : number, schedule : string) {
   try {
     console.log(`Starting job ${id}`)
-    cron.schedule(schedule, async () => {
+
+    if (scheduledJobs.has(id)) {
+        console.log(`Job ${id} already active`);
+        return;
+    }
+
+    const task = cron.schedule(schedule, async () => {
         console.log(`Cron Job ${id} - executed every ${schedule}`);
     });
+
+    scheduledJobs.set(id, task);   
+    console.log("MAP SIZE:", scheduledJobs.size); 
+
   } catch (err) {
     console.error({error: `failed at creating a job with id ${id}`, err})
   }

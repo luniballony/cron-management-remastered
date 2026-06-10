@@ -4,6 +4,7 @@ import cors from "cors";
 import {db} from "./db";
 import { addJob, activateAllJob, editJob, deleteJob, searchJob, createNewJob, changeStateJob} from "./cron-logic";
 
+
 dotenv.config();
 
 const app = express();
@@ -60,9 +61,14 @@ app.get("/view/:id", async (req, res) => {
 //addJob('https://bazaar-genie.netlify.app/', 'GET', '*/5 * * * * *', 'NULL-TEST');
 // activateAllJob();
 //editJob(18, "http://www.stardoll.com", "POST", "NULL", "*/5 * * *", "NULL");
-changeStateJob(1, false) 
+//changeStateJob(1, false) 
 
 
+async function setServer () {
+  await activateAllJob();
+}
+
+setServer()
 app.listen(3000);
 
 
