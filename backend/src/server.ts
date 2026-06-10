@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { addJob, activateAllJob, editJob, deleteJob, searchJob, createNewJob, activateJob, deActivateJob} from "./cron-logic";
-
+import { activateAllJob, activateJob, deActivateJob, createNewJob } from "./logic/activation-logic";
+import { editJob, deleteJob, searchJob, addJob } from "./logic/crud-logic";
 
 dotenv.config();
 
