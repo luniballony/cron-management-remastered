@@ -8,7 +8,7 @@ export function createNewJob (id : number, schedule : string) {
     console.log(`Starting job ${id}`)
 
     if (scheduledJobs.has(id)) {
-        console.log(`Job ${id} already active`);
+        console.log(`Job ${id} already active - reported at createnewjob`);
         return;
     }
 
@@ -17,8 +17,6 @@ export function createNewJob (id : number, schedule : string) {
     });
 
     scheduledJobs.set(id, task);   
-    console.log("MAP SIZE:", scheduledJobs.size); 
-
   } catch (err) {
     console.error({error: `failed at creating a job with id ${id}`, err})
   }
@@ -57,11 +55,11 @@ export async function addJob (uri : string, method : string, schedule : string, 
 export async function activateAllJob () {
     try {
         const result =  await db.query (
-            "SELECT * FROM cron_job"
+            "SELECT * FROM cron_job WHERE is_active = 't'"
         );
 
         for (const job of result.rows) {
-            createNewJob(job.id, job.schedule);
+            createNewJob(Number(job.id), job.schedule);
         }
 
         console.log(`Activated ${result.rows.length} jobs`);
@@ -143,7 +141,32 @@ export async function  changeStateJob (id: number, state : boolean) {
 
         let actualState = 'active';
         (state === true) ? actualState : actualState = 'not active';
-        console.log(`Set job with id ${id} to ${actualState}`);
+        console.log(`Set job with id ${id} to ${actualState} - reported at change state job`);
+    } catch (err) {
+        console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
+    }
+}
+
+export async function activateJob(id: number) {
+    
+    if(scheduledJobs.has(id)) {
+        console.log(`The cron job with id ${id} is already active - reported at activate job`);
+        return;
+    }
+    try {
+        const result =  await db.query (
+            "UPDATE cron_job SET is_active = 't', updated_at = NOW() WHERE id = $1 RETURNING *",
+            [id]
+        );
+        
+        if (result.rowCount === 0) {
+            console.log(`Couldnt change the state of the job with id ${id}.`)
+            return;
+        }
+
+        createNewJob(id, result.rows[0].schedule);
+
+        console.log(`Set job with id ${id} to active - reported at activate job`);
     } catch (err) {
         console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
     }
