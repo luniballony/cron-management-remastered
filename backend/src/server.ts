@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { addJob, activateAllJob, editJob, deleteJob, searchJob, createNewJob} from "./cron-logic";
+import { addJob, activateAllJob, editJob, deleteJob, searchJob, createNewJob, changeStateJob} from "./cron-logic";
 
 dotenv.config();
 
@@ -60,6 +60,8 @@ app.get("/view/:id", async (req, res) => {
 //addJob('https://bazaar-genie.netlify.app/', 'GET', '*/5 * * * * *', 'NULL-TEST');
 // activateAllJob();
 //editJob(18, "http://www.stardoll.com", "POST", "NULL", "*/5 * * *", "NULL");
+changeStateJob(1, false) 
+
 
 app.listen(3000);
 

@@ -117,3 +117,24 @@ export async function searchJob(id : number) {
         console.error({error : `Error at finding cron job with id: ${id} - ${err}`})
     }
 }
+
+// this function changes state of a job to active or not active
+export async function  changeStateJob (id: number, state : boolean) {
+    try {
+        const result =  await db.query (
+            "UPDATE cron_job SET is_active = $2, updated_at = NOW() WHERE id = $1",
+            [id, state]
+        );
+
+        if (result.rowCount === 0) {
+            console.log(`Couldnt change the state of the job with id ${id}.`)
+            return;
+        }
+
+        let actualState = 'active';
+        (state === true) ? actualState : actualState = 'not active';
+        console.log(`Set job with id ${id} to ${actualState}`);
+    } catch (err) {
+        console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
+    }
+}
