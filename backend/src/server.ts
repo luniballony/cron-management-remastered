@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { addJob, activateAllJob, editJob, deleteJob, searchJob, createNewJob, activateJob, changeStateJob} from "./cron-logic";
+import { addJob, activateAllJob, editJob, deleteJob, searchJob, createNewJob, activateJob, changeStateJob, deActivateJob} from "./cron-logic";
 
 
 dotenv.config();
@@ -66,14 +66,13 @@ app.get("/view/:id", async (req, res) => {
 
 async function setServer () {
   await activateAllJob();
-
-  changeStateJob(1, true) 
-  await activateJob(1)
+  await deActivateJob(1);
+  await activateJob(4);
   
 }
 
 setServer()
-//changeStateJob(1, false) 
+
 app.listen(3000);
 
 

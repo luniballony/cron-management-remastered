@@ -153,6 +153,7 @@ export async function activateJob(id: number) {
         console.log(`The cron job with id ${id} is already active - reported at activate job`);
         return;
     }
+
     try {
         const result =  await db.query (
             "UPDATE cron_job SET is_active = 't', updated_at = NOW() WHERE id = $1 RETURNING *",
@@ -167,6 +168,39 @@ export async function activateJob(id: number) {
         createNewJob(id, result.rows[0].schedule);
 
         console.log(`Set job with id ${id} to active - reported at activate job`);
+    } catch (err) {
+        console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
+    }
+}
+
+
+export async function deActivateJob(id : number) {
+    if(!scheduledJobs.has(id)) {
+        console.log(`No cron job with id ${id} found - reported at deActivateJob`);
+        return;
+    }
+    
+    try {
+        const result =  await db.query (
+            "UPDATE cron_job SET is_active = 'f', updated_at = NOW() WHERE id = $1 RETURNING *",
+            [id]
+        );
+        
+        if (result.rowCount === 0) {
+            console.log(`Couldnt change the state of the job with id ${id}.`)
+            return;
+        }
+
+        // stops the actual cron job
+        const task = scheduledJobs.get(id);
+        if(task) { 
+            task.stop(); // pauses execution
+            task.destroy(); // deletes it from memory
+        }
+        
+        // removes from the map
+        scheduledJobs.delete(id);
+        console.log(`Set job with id ${id} to not active - reported at activate job`);
     } catch (err) {
         console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
     }
