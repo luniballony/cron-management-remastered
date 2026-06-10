@@ -126,27 +126,7 @@ export async function searchJob(id : number) {
     }
 }
 
-// this function changes state of a job to active or not active
-export async function  changeStateJob (id: number, state : boolean) {
-    try {
-        const result =  await db.query (
-            "UPDATE cron_job SET is_active = $2, updated_at = NOW() WHERE id = $1",
-            [id, state]
-        );
-
-        if (result.rowCount === 0) {
-            console.log(`Couldnt change the state of the job with id ${id}.`)
-            return;
-        }
-
-        let actualState = 'active';
-        (state === true) ? actualState : actualState = 'not active';
-        console.log(`Set job with id ${id} to ${actualState} - reported at change state job`);
-    } catch (err) {
-        console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
-    }
-}
-
+// function to activate a job 
 export async function activateJob(id: number) {
     
     if(scheduledJobs.has(id)) {
@@ -174,6 +154,7 @@ export async function activateJob(id: number) {
 }
 
 
+// function to stop a cron job
 export async function deActivateJob(id : number) {
     if(!scheduledJobs.has(id)) {
         console.log(`No cron job with id ${id} found - reported at deActivateJob`);
