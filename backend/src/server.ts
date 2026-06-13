@@ -2,12 +2,12 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { activateAllJob, activateJob, deActivateJob, createNewJob } from "./logic/activation-logic";
+import { activateAllJob, activateJob, deActivateJob, jobCreation } from "./logic/activation-logic";
 import { editJob, deleteJob, searchJob, addJob } from "./logic/crud-logic";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 app.use(cors());
 app.use(express.json());
 
@@ -47,8 +47,15 @@ app.get("/view/:id", async (req, res) => {
       error: "couldnt find cron job with that id."
     })
   }
-  createNewJob(cronId, result.schedule);
+  //createNewJob(cronId, result.schedule);
   return res.json(result);
+})
+
+app.delete("/delete/:id", async (req, res) =>{
+  const id = Number(req.params.id)
+  await deleteJob(id);
+
+  return res.send("delete job");
 })
 
 // TESTING SEGMENT
@@ -65,11 +72,8 @@ app.get("/view/:id", async (req, res) => {
 
 
 async function setServer () {
-  await activateAllJob();
-  await deActivateJob(1);
-  await activateJob(4);
-  
-}
+  await activateAllJob();   
+  }
 
 setServer()
 

@@ -1,10 +1,11 @@
 import { scheduledJobs } from "../scheduledJobs";
 import cron from "node-cron";
 import { db } from "../db";
+import { searchJob } from "./crud-logic";
 
 
 // function to create a new cron job
-export function createNewJob (id : number, schedule : string) {
+export async function jobCreation (id : number ) {
   try {
     console.log(`Starting job ${id}`)
 
@@ -13,8 +14,25 @@ export function createNewJob (id : number, schedule : string) {
         return;
     }
 
-    const task = cron.schedule(schedule, async () => {
-        console.log(`Cron Job ${id} - executed every ${schedule}`);
+    const data = await searchJob(id);
+
+    if(!data) {
+        console.log("Oh no, error at fetching cron data - reported at jobCreation");
+    }
+
+    const task = cron.schedule(data.schedule, async () => {
+        try {
+            const response = await fetch(data.uri, {
+                method : data.http_method,
+                ...(data.body != null && {
+                    headers: { 'Content-Type': 'application/json' },
+                    body : data.body, })
+            });
+
+            console.log(`Job ${id} completed - status: ${response.status}`);
+        } catch (err) {
+            console.error({error: `Oh no, there was an jobCreation ${id} - ${err}`})
+        }
     });
 
     scheduledJobs.set(id, task);   
@@ -24,9 +42,9 @@ export function createNewJob (id : number, schedule : string) {
 }
 
 
+
 // function to activate a job 
 export async function activateJob(id: number) {
-    
     if(scheduledJobs.has(id)) {
         console.log(`The cron job with id ${id} is already active - reported at activate job`);
         return;
@@ -43,8 +61,7 @@ export async function activateJob(id: number) {
             return;
         }
 
-        createNewJob(id, result.rows[0].schedule);
-
+        await jobCreation(id);
         console.log(`Set job with id ${id} to active - reported at activate job`);
     } catch (err) {
         console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
@@ -61,7 +78,8 @@ export async function activateAllJob () {
         );
 
         for (const job of result.rows) {
-            createNewJob(Number(job.id), job.schedule);
+            //createNewJob(Number(job.id), job.schedule);
+            await jobCreation(job.id);
         }
 
         console.log(`Activated ${result.rows.length} jobs`);

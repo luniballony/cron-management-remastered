@@ -1,38 +1,39 @@
 import { db } from "../db";
-import { createNewJob } from "./activation-logic";
-
+import { deActivateJob, jobCreation } from "./activation-logic";
 
 
 // funtion to add a new cron job, add to database and activate it
 export async function addJob (uri : string, method : string, schedule : string, timezone : string, body? : string) {
   if (!body){
     const result = await db.query(
-      "INSERT INTO cron_job (uri,http_method, schedule, timezone) VALUES ($1, $2, $3, $4)",
+      "INSERT INTO cron_job (uri,http_method, schedule, timezone) VALUES ($1, $2, $3, $4) RETURNING *",
       [uri, method, schedule, timezone]);
 
     if(!result) {
-      console.log("Error at adding a new job to the db");
-    }}
+      console.log(`Error at adding a new job to the database`);
+    }
+
+    jobCreation(result.rows[0].id);
+}
     
   else {
     const result = await db.query(
-    "INSERT INTO cron_job (uri,http_method, schedule, timezone, body) VALUES ($1, $2, $3, $4, $5)",
+    "INSERT INTO cron_job (uri,http_method, schedule, timezone, body) VALUES ($1, $2, $3, $4, $5) RETURNING *",
     [uri, method, schedule, timezone, body]);
 
     if(!result) {
       console.log("Error at adding a new job to the db");
     }
-  }
 
-  const id = 1;
-  // activates job
-  createNewJob(id, schedule);
-  console.log("added new job to db")
+    jobCreation(result.rows[0].id);
+  }
+  console.log(`Added a new job to the database`)
 }
 
 
 // function to edit a job 
 // currently updates all sections, even if they are the same
+// should first deactivate job and activate it at the end
 export async function editJob(id : number, uri? : string, httpMethod? : string, body? : string, schedule? : string, timezone? : string  ) {
     try {
         const result =  await db.query (
@@ -63,6 +64,8 @@ export async function deleteJob (id : number) {
             return;
         } 
         
+        // important to deactive after deleting it
+        await deActivateJob(id);
         console.log(`Deleted cron job with id: ${id}`);
         
     } catch(err) {
