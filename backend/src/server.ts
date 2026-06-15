@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { activateAllJob, activateJob, deActivateJob, jobCreation } from "./logic/activation-logic";
+import { activateAllJob, activateJob, deActivateAllJob, deActivateJob, jobCreation } from "./logic/activation-logic";
 import { editJob, deleteJob, searchJob, addJob } from "./logic/crud-logic";
 
 dotenv.config();
@@ -72,7 +72,8 @@ app.delete("/delete/:id", async (req, res) =>{
 
 
 async function setServer () {
-  await activateAllJob();   
+  //await activateAllJob();  
+  await deActivateAllJob(); 
   }
 
 setServer()

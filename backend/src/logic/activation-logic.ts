@@ -69,26 +69,6 @@ export async function activateJob(id: number) {
 }
 
 
-// this function is called at the start of the server to activate all jobs 
-// in the future make sure to only start those that are active.
-export async function activateAllJob () {
-    try {
-        const result =  await db.query (
-            "SELECT * FROM cron_job WHERE is_active = 't'"
-        );
-
-        for (const job of result.rows) {
-            //createNewJob(Number(job.id), job.schedule);
-            await jobCreation(job.id);
-        }
-
-        console.log(`Activated ${result.rows.length} jobs`);
-    } catch (err) {
-        console.error({error: `Oh no, error at activating all jobs: ${err}`});
-    }
-}
-
-
 // function to stop a cron job
 export async function deActivateJob(id : number) {
     if(!scheduledJobs.has(id)) {
@@ -119,5 +99,44 @@ export async function deActivateJob(id : number) {
         console.log(`Set job with id ${id} to not active - reported at activate job`);
     } catch (err) {
         console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
+    }
+}
+
+
+
+// this function is called at the start of the server to activate all jobs 
+export async function activateAllJob () {
+    try {
+        const result =  await db.query (
+            "SELECT * FROM cron_job WHERE is_active = 't'"
+        );
+
+        for (const job of result.rows) {
+            //createNewJob(Number(job.id), job.schedule);
+            await jobCreation(job.id);
+        }
+
+        console.log(`Activated ${result.rows.length} jobs`);
+    } catch (err) {
+        console.error({error: `Oh no, error at activating all jobs: ${err}`});
+    }
+}
+
+
+
+// this function is called to deactivate all jobs 
+export async function deActivateAllJob () {
+    try {
+        const result =  await db.query (
+            "UPDATE cron_job SET is_active = 'f', updated_at = NOW() WHERE is_active = 't' RETURNING *"
+        );
+
+        for (const job of result.rows) {
+            await deActivateJob(job.id);
+        }
+
+        console.log(`Deactivated ${result.rows.length} jobs`);
+    } catch (err) {
+        console.error({error: `Oh no, error at deactivating all jobs: ${err}`});
     }
 }

@@ -1,6 +1,6 @@
 import { db } from "../db";
 import { scheduledJobs } from "../scheduledJobs";
-import { activateAllJob, activateJob, deActivateJob, jobCreation } from "./activation-logic";
+import { activateJob, deActivateJob, jobCreation } from "./activation-logic";
 
 
 // funtion to add a new cron job, add to database and activate it
