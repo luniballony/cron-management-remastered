@@ -73,7 +73,7 @@ export async function activateJob(id: number) {
 export async function deActivateJob(id : number) {
     if(!scheduledJobs.has(id)) {
         console.log(`No cron job with id ${id} found - reported at deActivateJob`);
-        return;
+        return true;
     }
     
     try {
@@ -84,7 +84,7 @@ export async function deActivateJob(id : number) {
         
         if (result.rowCount === 0) {
             console.log(`Couldnt change the state of the job with id ${id}.`)
-            return;
+            return false;
         }
 
         // stops the actual cron job
@@ -97,8 +97,10 @@ export async function deActivateJob(id : number) {
         // removes from the map
         scheduledJobs.delete(id);
         console.log(`Set job with id ${id} to not active - reported at activate job`);
+        return true;
     } catch (err) {
         console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
+        return false;
     }
 }
 

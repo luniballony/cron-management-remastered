@@ -53,9 +53,13 @@ app.get("/view/:id", async (req, res) => {
 
 app.delete("/delete/:id", async (req, res) =>{
   const id = Number(req.params.id)
-  await deleteJob(id);
+  const deleted = await deleteJob(id);
 
-  return res.send("delete job");
+  if(!deleted) {
+    return res.status(404).json({ error: `Job ${id} not found` });
+  }
+  
+  return res.status(200).json({ message: `Job ${id} deleted successfully` });
 })
 
 // TESTING SEGMENT

@@ -59,6 +59,12 @@ export async function editJob(id : number, uri? : string, httpMethod? : string, 
 
 export async function deleteJob (id : number) {
     try {
+        // important to deactive before deleting it
+        if(!await deActivateJob(id)) {
+            console.log(`Aborting deletion of job ${id} - deactivation failed`);
+            return false;
+        }
+
         const result = await db.query(
             "DELETE FROM cron_job WHERE id = $1",
             [id]
@@ -66,13 +72,11 @@ export async function deleteJob (id : number) {
 
         if (result.rowCount === 0) {
             console.log(`Couldnt delete job with id ${id} because it couldnt be found in the database`)
-            return;
+            return false;
         } 
-        
-        // important to deactive after deleting it
-        await deActivateJob(id);
+
         console.log(`Deleted cron job with id: ${id}`);
-        
+        return true;
     } catch(err) {
         console.error({error: `Error at deleting job with id: ${id} - ${err}`})
     }
