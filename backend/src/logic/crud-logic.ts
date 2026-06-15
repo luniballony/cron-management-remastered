@@ -1,5 +1,6 @@
 import { db } from "../db";
-import { deActivateJob, jobCreation } from "./activation-logic";
+import { scheduledJobs } from "../scheduledJobs";
+import { activateAllJob, activateJob, deActivateJob, jobCreation } from "./activation-logic";
 
 
 // funtion to add a new cron job, add to database and activate it
@@ -33,8 +34,10 @@ export async function addJob (uri : string, method : string, schedule : string, 
 
 // function to edit a job 
 // currently updates all sections, even if they are the same
-// should first deactivate job and activate it at the end
 export async function editJob(id : number, uri? : string, httpMethod? : string, body? : string, schedule? : string, timezone? : string  ) {
+    // first deactivate job if its active
+    if (scheduledJobs.has(id)) deActivateJob(id);
+        
     try {
         const result =  await db.query (
             "UPDATE cron_job SET uri = $2, http_method = $3, body = $4, schedule = $5, timezone = $6, updated_at = NOW() WHERE id = $1",
@@ -46,6 +49,8 @@ export async function editJob(id : number, uri? : string, httpMethod? : string, 
             return;
         }
 
+        // activate after being edited job 
+        activateJob(id);
         console.log(`Updated cron job with id ${id}`);
     } catch (err) {
         console.error({error: `Oh no, error while editing job with id: ${id} - ${err}`});
