@@ -1,7 +1,12 @@
-function main () {
-  return (
-    <>hiii</>
-  )
-}
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './style.css'
+import App from './App'
+import AppRouter from './router/AppRouter'
 
-export default main;
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+    <AppRouter />
+  </StrictMode>
+)
