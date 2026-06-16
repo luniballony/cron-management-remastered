@@ -1,4 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
+import CronJobCard from "../components/cronJobCard";
 
 export type jobType = {
     id : number,
@@ -27,11 +28,13 @@ function ViewAll () {
         <>You're viewing ALLL the jobs
             {
                 jobs?.map((item : jobType) => (
-                    <Fragment key = {item.id}>Job with : {item.id}</Fragment>
+                    <CronJobCard key = {item.id} job={item} />
                 ))
             }
         </>
     )
 }
 
+// previous element, had to be removed since it can only pass 1
+//<Fragment key = {item.id}>Job with : {item.id}</Fragment>
 export default ViewAll;
