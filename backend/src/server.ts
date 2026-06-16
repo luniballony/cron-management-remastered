@@ -76,8 +76,8 @@ app.delete("/delete/:id", async (req, res) =>{
 
 
 async function setServer () {
-  //await activateAllJob();  
-  await deActivateAllJob(); 
+  await activateAllJob();  
+  //await deActivateAllJob(); 
   }
 
 setServer()

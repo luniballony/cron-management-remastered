@@ -110,11 +110,12 @@ export async function deActivateJob(id : number) {
 export async function activateAllJob () {
     try {
         const result =  await db.query (
-            "SELECT * FROM cron_job WHERE is_active = 't'"
+            "SELECT * FROM cron_job"
         );
 
         for (const job of result.rows) {
             //createNewJob(Number(job.id), job.schedule);
+            await activateJob(job.id);
             await jobCreation(job.id);
         }
 

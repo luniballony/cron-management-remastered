@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState } from "react";
 import CronJobCard from "../components/cronJobCard";
 
 export type jobType = {
@@ -35,6 +35,5 @@ function ViewAll () {
     )
 }
 
-// previous element, had to be removed since it can only pass 1
-//<Fragment key = {item.id}>Job with : {item.id}</Fragment>
+
 export default ViewAll;
