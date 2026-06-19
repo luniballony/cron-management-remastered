@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CronJobCard from "../components/cronJobCard";
+import CronJobCard from "../components/CronJobCard";
 
 export type jobType = {
     id : number,

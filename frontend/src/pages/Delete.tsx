@@ -22,7 +22,7 @@ function Delete () {
     }, [cronJob])
 
     if(!cronJob) {
-        console.log(`Oh no, there was an error getting the page id: ${cronJob}`)
+        console.log(`Oh no, there was an error getting the page id: ${cronJob}`);
         return null;
     }
     
