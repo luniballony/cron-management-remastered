@@ -1,0 +1,15 @@
+// file with job examples to test
+// Every minute - basic GET
+addJob("https://jsonplaceholder.typicode.com/posts", "GET", "* * * * *", "Europe/Lisbon")
+
+// Every 2 minutes - GET single post
+addJob("https://jsonplaceholder.typicode.com/posts/1", "GET", "*/2 * * * *", "Europe/Lisbon")
+
+// Every 3 minutes - POST with body
+addJob("https://jsonplaceholder.typicode.com/posts", "POST", "*/3 * * * *", "Europe/Lisbon", JSON.stringify({ title: "scheduled post", body: "hello from cron", userId: 1 }))
+
+// Every 4 minutes - PUT with body
+addJob("https://jsonplaceholder.typicode.com/posts/1", "PUT", "*/4 * * * *", "Europe/Lisbon", JSON.stringify({ id: 1, title: "updated", body: "updated body", userId: 1 }))
+
+// Every 5 minutes - DELETE
+addJob("https://jsonplaceholder.typicode.com/posts/1", "DELETE", "*/5 * * * *", "Europe/Lisbon")

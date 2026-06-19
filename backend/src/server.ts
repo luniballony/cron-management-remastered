@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { activateAllJob, activateJob, deActivateAllJob, deActivateJob, jobCreation } from "./logic/activation-logic";
-import { editJob, deleteJob, searchJob, addJob } from "./logic/crud-logic";
+import { activateAllJob } from "./logic/activation-logic";
+import { deleteJob, searchJob, addJob } from "./logic/crud-logic";
 
 dotenv.config();
 
@@ -51,6 +51,14 @@ app.get("/view/:id", async (req, res) => {
   return res.json(result);
 })
 
+app.post("/addjob", async (req, res) => {
+  const {uri, body, schedule, method, timezone } = req.body
+
+  const newJob = await addJob(uri, method, schedule, timezone, body)
+
+  return res.status(201).json(newJob);
+});
+
 app.delete("/delete/:id", async (req, res) =>{
   const id = Number(req.params.id)
   const deleted = await deleteJob(id);
@@ -73,6 +81,7 @@ app.delete("/delete/:id", async (req, res) =>{
 // activateAllJob();
 //editJob(18, "http://www.stardoll.com", "POST", "NULL", "*/5 * * *", "NULL");
 //changeStateJob(1, false) 
+
 
 
 async function setServer () {

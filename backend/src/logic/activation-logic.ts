@@ -114,9 +114,7 @@ export async function activateAllJob () {
         );
 
         for (const job of result.rows) {
-            //createNewJob(Number(job.id), job.schedule);
             await activateJob(job.id);
-            await jobCreation(job.id);
         }
 
         console.log(`Activated ${result.rows.length} jobs`);
