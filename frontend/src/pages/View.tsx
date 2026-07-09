@@ -17,9 +17,9 @@ function View () {
             )
     }, [id])
 
-    if(!job) {
+    if(!job || !job.id) {
         console.log(`Oh no, we couldnt retrieve job with id ${id}`);
-        return null;
+        return <>Oh no, we couldnt locate this job in the database.</>;
     }
 
     return (
