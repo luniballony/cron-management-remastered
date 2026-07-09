@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 app.get("/view-all", async(req, res) => {
   try{
     const result = await db.query(
-      "SELECT * FROM cron_job");
+      "SELECT * FROM cron_job ORDER BY is_active, id");
 
       res.json(result.rows);
       console.log("Connected to cron job table")
