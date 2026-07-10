@@ -7,9 +7,9 @@ export type jobType = {
     httpMethod : string,
     body? : string,
     schedule : string,
-    isActive : boolean,
-    createdAt : string,
-    updatedAt : string
+    is_active : boolean,
+    created_at : string,
+    updated_at : string
 }
 
 function ViewAll () {
