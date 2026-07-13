@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CronJobCard from "../components/CronJobCard";
-import type { jobType }  from "../hooks/useJobs";
 import { useParams } from "react-router";
 import useJobs from "../hooks/useJobs"
 
@@ -8,16 +7,6 @@ import useJobs from "../hooks/useJobs"
 function View () {
 
     const {id} = useParams<{id : string}>();
-    // const [job, setJob] = useState<jobType | null>(null);
-
-    // useEffect(() => {
-    //     fetch(`http://localhost:3000/view/${id}`)
-    //         .then(res => res.json())
-    //         .then(data => 
-    //             setJob(data)
-    //         )
-    // }, [id])
-
     const {job, fetchUniqueJob, handleDelete } = useJobs();
 
     useEffect (() => {
