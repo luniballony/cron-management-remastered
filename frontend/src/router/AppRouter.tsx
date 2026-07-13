@@ -6,6 +6,7 @@ import AddJob from "../pages/AddJob";
 import View from "../pages/View";
 import NotFound from "../pages/NotFound";
 import About from '../pages/About';
+import EditJob from "../pages/EditJob";
 
 
 function AppRouter () {
@@ -17,6 +18,7 @@ function AppRouter () {
                 <Route path="/view-all" element = {< ViewAll />} />
                 <Route path="/delete/:cronJob" element = {< Delete />} />
                 <Route path="/addjob" element = {<AddJob />} />
+                <Route path="/edit/:id" element = {<EditJob />} />
                 <Route path="/about" element = {<About />} />
                 <Route path="/*" element = {<NotFound />} />
             </Routes>

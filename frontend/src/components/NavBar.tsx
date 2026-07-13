@@ -11,9 +11,7 @@ const NavBar = () => {
             <li className="list-none">
                 <a href="/view-all">View Jobs</a></li>
             <li className="list-none">
-                <a href="/addjob">Create New Job</a></li>            
-            <li className="list-none">
-                <a href="/">Edit Job</a></li>
+                <a href="/addjob">Create New Job</a></li> 
             <li className="list-none">
                 <a href="/about">About</a></li>
         </div>

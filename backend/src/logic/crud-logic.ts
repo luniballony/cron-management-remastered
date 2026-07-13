@@ -40,7 +40,7 @@ export async function editJob(id : number, uri? : string, httpMethod? : string, 
         
     try {
         const result =  await db.query (
-            "UPDATE cron_job SET uri = $2, http_method = $3, body = $4, schedule = $5, timezone = $6, updated_at = NOW() WHERE id = $1",
+            "UPDATE cron_job SET uri = $2, http_method = $3, body = $4, schedule = $5, timezone = $6, updated_at = NOW() WHERE id = $1 RETURNING *",
             [id, uri, httpMethod, body, schedule, timezone]
         );
 

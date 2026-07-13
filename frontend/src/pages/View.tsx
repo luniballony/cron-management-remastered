@@ -21,6 +21,7 @@ function View () {
     return (
         <>{`You're viewing job with the id: ${job.id}`}
             <CronJobCard key = {job.id} job={job} onDelete={handleDelete} />
+            <a href={`/edit/${id}`} > Edit </a>
         </>
     )
 }

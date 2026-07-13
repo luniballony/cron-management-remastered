@@ -24,7 +24,7 @@ const CronJobCard = ({job, onDelete} : {job : jobType; onDelete: (id : number) =
                 <p>URI: {job.uri}</p>
             </a>
         </li>
-            <p>Method: {job.httpMethod}</p>
+            <p>Method: {job.http_method}</p>
             <p>Body: {job.body? job.body : `This job has no body declared.`}</p>
             <p>Schedule: {job.schedule}</p>
             <p>Created at: {job.created_at}</p>

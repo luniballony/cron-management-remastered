@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import {db} from "./db";
 import { activateAllJob } from "./logic/activation-logic";
-import { deleteJob, searchJob, addJob } from "./logic/crud-logic";
+import { deleteJob, searchJob, addJob, editJob } from "./logic/crud-logic";
 
 dotenv.config();
 
@@ -52,9 +52,9 @@ app.get("/view/:id", async (req, res) => {
 })
 
 app.post("/addjob", async (req, res) => {
-  const {uri, body, schedule, method, timezone } = req.body
+  const {uri, body, schedule, method, timezone } = req.body;
 
-  const newJob = await addJob(uri, method, schedule, timezone, body)
+  const newJob = await addJob(uri, method, schedule, timezone, body);
 
   return res.status(201).json(newJob);
 });
@@ -68,6 +68,15 @@ app.delete("/delete/:id", async (req, res) =>{
   }
   
   return res.status(200).json({ message: `Job ${id} deleted successfully` });
+})
+
+app.put("/edit/:id", async (req, res) => {
+  const id = Number(req.params.id)
+  const {uri, body, schedule, http_method, timezone } = req.body;
+
+  const editedJob = await editJob(id, uri, http_method, body, schedule, timezone);
+
+  return res.status(200).json(editedJob);
 })
 
 // TESTING SEGMENT

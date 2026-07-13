@@ -3,9 +3,10 @@ import { useState } from "react";
 export type jobType = {
     id : number,
     uri : string,
-    httpMethod : string,
+    http_method : string,
     body? : string,
     schedule : string,
+    timezone : string,
     is_active : boolean,
     created_at : string,
     updated_at : string
