@@ -47,7 +47,7 @@ export async function jobCreation (id : number ) {
 export async function activateJob(id: number) {
     if(scheduledJobs.has(id)) {
         console.log(`The cron job with id ${id} is already active - reported at activate job`);
-        return;
+        return false;
     }
 
     try {
@@ -58,48 +58,43 @@ export async function activateJob(id: number) {
         
         if (result.rowCount === 0) {
             console.log(`Couldnt change the state of the job with id ${id}.`)
-            return;
+            return false;
         }
 
         await jobCreation(id);
         console.log(`Set job with id ${id} to active - reported at activate job`);
+        return true;
     } catch (err) {
         console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
+        return false;
     }
 }
 
 
-// function to stop a cron job
-export async function deActivateJob(id : number) {
-    if(!scheduledJobs.has(id)) {
-        console.log(`No cron job with id ${id} found - reported at deActivateJob`);
-        return true;
-    }
-    
+export async function deActivateJob(id: number) {
     try {
-        const result =  await db.query (
+        const result = await db.query(
             "UPDATE cron_job SET is_active = 'f', updated_at = NOW() WHERE id = $1 RETURNING *",
             [id]
         );
-        
+
         if (result.rowCount === 0) {
-            console.log(`Couldnt change the state of the job with id ${id}.`)
+            console.log(`Couldnt change the state of the job with id ${id}.`);
             return false;
         }
 
-        // stops the actual cron job
+        // only stop/cleanup the in-memory task if it's actually scheduled
         const task = scheduledJobs.get(id);
-        if(task) { 
-            task.stop(); // pauses execution
-            task.destroy(); // deletes it from memory
+        if (task) {
+            task.stop();
+            task.destroy();
+            scheduledJobs.delete(id);
         }
-        
-        // removes from the map
-        scheduledJobs.delete(id);
-        console.log(`Set job with id ${id} to not active - reported at activate job`);
+
+        console.log(`Set job with id ${id} to not active - reported at deActivateJob`);
         return true;
     } catch (err) {
-        console.error({error : `Oh no, couldn't find job with id: ${id} - ${err}`})
+        console.error({ error: `Oh no, couldn't find job with id: ${id} - ${err}` });
         return false;
     }
 }

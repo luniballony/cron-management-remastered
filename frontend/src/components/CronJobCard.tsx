@@ -1,6 +1,7 @@
 import type { jobType }  from "../hooks/useJobs";
+import ActivateButton from "./ActivateButton";
 
-const CronJobCard = ({job, onDelete} : {job : jobType; onDelete: (id : number) => void }) => {
+const CronJobCard = ({job, onDelete, onStatusChange} : {job : jobType; onDelete: (id : number) => void ; onStatusChange: () => void }) => {
 
     return (
         <div className="bg-blue-200
@@ -34,6 +35,8 @@ const CronJobCard = ({job, onDelete} : {job : jobType; onDelete: (id : number) =
                     cursor-pointer
                     bg-blue-500
                 ">Delete</button>
+
+                <ActivateButton key = {job.id} job = {job} onStatusChange={onStatusChange}/>
         </div>
     )
 }

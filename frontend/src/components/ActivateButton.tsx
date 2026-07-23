@@ -1,0 +1,47 @@
+import type { jobType }  from "../hooks/useJobs";
+
+const ActivateButton = ({job, onStatusChange} : {job : jobType; onStatusChange: () => void }) => {
+    
+    if(!job || !job.id) {
+        console.log(job.id);
+        console.log(`Oh no, we couldnt retrieve job with id ${job.id} - button`);
+        return <>Failed at Loading Button - activate</>;
+    }
+
+    function handleActivation () {
+        console.log("started activation")
+        fetch(`http://localhost:3000/activate/${job.id}`)
+            .then(res => {
+                console.log(res);
+                onStatusChange(); // calls fetchJobs so it updates card in viewAll
+            })
+    }
+
+    function handleDeActivation () {
+        console.log("started deactivation")
+        fetch(`http://localhost:3000/deactivate/${job.id}`)
+            .then(res => {
+                console.log(res);
+                onStatusChange(); // calls fetchJobs so it updates card in viewAll
+            })
+    }
+
+    return (
+        <div>{
+            job.is_active === false 
+            ?
+                <button onClick={handleActivation} className="
+                    bg-green-500
+                    cursor-pointer
+                ">Activate</button>
+            :  <button onClick={handleDeActivation} className="
+                    bg-red-400
+                    cursor-pointer
+                ">De Activate</button>
+        }            
+        </div>
+    )
+
+}
+
+export default ActivateButton

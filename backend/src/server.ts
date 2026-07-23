@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { activateAllJob } from "./logic/activation-logic";
+import { activateAllJob, activateJob, deActivateJob } from "./logic/activation-logic";
 import { deleteJob, searchJob, addJob, editJob } from "./logic/crud-logic";
 
 dotenv.config();
@@ -22,7 +22,7 @@ app.get("/view-all", async(req, res) => {
       "SELECT * FROM cron_job ORDER BY is_active, id");
 
       res.json(result.rows);
-      console.log("Connected to cron job table")
+      //console.log("Connected to cron job table")
     } catch(err) {
       console.error(err);
       res.status(500).json({error : "Unable to connect to Cron-Job table"})
@@ -79,23 +79,28 @@ app.put("/edit/:id", async (req, res) => {
   return res.status(200).json(editedJob);
 })
 
-// TESTING SEGMENT
-// cron job template
-// cron.schedule("* * * * *", async () => {
-//     console.log("Runs every minute");
-// });
 
+app.get("/activate/:id", async(req, res) =>{
+    const id = Number(req.params.id);
 
-//addJob('https://bazaar-genie.netlify.app/', 'GET', '*/5 * * * * *', 'NULL-TEST');
-// activateAllJob();
-//editJob(18, "http://www.stardoll.com", "POST", "NULL", "*/5 * * *", "NULL");
-//changeStateJob(1, false) 
+    const r = await activateJob(id);
 
+    if (r) return res.status(200).send();
+    else return res.status(500).send();
+})
+
+app.get("/deactivate/:id", async (req, res) => {
+  const id =Number(req.params.id);
+
+  const r = await deActivateJob(id);
+
+  if (r) return res.status(200).send();
+  else return res.status(500).send();
+})
 
 
 async function setServer () {
   await activateAllJob();  
-  //await deActivateAllJob(); 
   }
 
 setServer()

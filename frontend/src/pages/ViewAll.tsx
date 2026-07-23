@@ -16,7 +16,11 @@ function ViewAll () {
         <>You're viewing ALLL the jobs
             {   
                 jobs?.map((item : jobType) => (
-                    <CronJobCard key = {item.id} job={item} onDelete = {handleDelete}/>
+                    <CronJobCard 
+                        key = {item.id} 
+                        job = {item} 
+                        onDelete = {handleDelete} 
+                        onStatusChange = {fetchJobs}/>
                 ))
             }
         </>
