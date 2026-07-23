@@ -81,18 +81,26 @@ app.put("/edit/:id", async (req, res) => {
 
 
 app.get("/activate/:id", async(req, res) =>{
-    const id = Number(req.params.id);
+  const id = Number(req.params.id);
 
-    const r = await activateJob(id);
+  const r = await activateJob(id);
 
-    if (r) return res.status(200).send();
-    else return res.status(500).send();
+  if (r) return res.status(200).send();
+  else return res.status(500).send();
 })
 
 app.get("/deactivate/:id", async (req, res) => {
-  const id =Number(req.params.id);
+  const id = Number(req.params.id);
 
   const r = await deActivateJob(id);
+
+  if (r) return res.status(200).send();
+  else return res.status(500).send();
+})
+
+
+app.get("/activate-all", async (req, res) => {
+  const r = await activateAllJob();
 
   if (r) return res.status(200).send();
   else return res.status(500).send();

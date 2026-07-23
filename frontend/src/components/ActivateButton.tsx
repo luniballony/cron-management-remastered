@@ -1,7 +1,8 @@
-import type { jobType }  from "../hooks/useJobs";
+import type { jobType } from "../hooks/useJobs";
 
 const ActivateButton = ({job, onStatusChange} : {job : jobType; onStatusChange: () => void }) => {
-    
+
+
     if(!job || !job.id) {
         console.log(job.id);
         console.log(`Oh no, we couldnt retrieve job with id ${job.id} - button`);

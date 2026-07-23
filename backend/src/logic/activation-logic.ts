@@ -105,7 +105,7 @@ export async function deActivateJob(id: number) {
 export async function activateAllJob () {
     try {
         const result =  await db.query (
-            "SELECT * FROM cron_job"
+            "SELECT * FROM cron_job WHERE is_active = 'f'"
         );
 
         for (const job of result.rows) {
@@ -113,8 +113,10 @@ export async function activateAllJob () {
         }
 
         console.log(`Activated ${result.rows.length} jobs`);
+        return true;
     } catch (err) {
         console.error({error: `Oh no, error at activating all jobs: ${err}`});
+        return false;
     }
 }
 

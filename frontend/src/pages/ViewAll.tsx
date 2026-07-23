@@ -12,8 +12,23 @@ function ViewAll () {
         fetchJobs();
     }, [])
 
+    function activateAllJobs () {
+        console.log("Started activation of all jobs.")
+        fetch(`http://localhost:3000/activate-all`)
+            .then(res => {
+                console.log(res);
+                console.log("Re-render")
+                fetchJobs();
+            })
+    }
+
     return (
         <>You're viewing ALLL the jobs
+            <button 
+                onClick={activateAllJobs}
+                className="bg-gray-200
+                            cursor-pointer">
+                    Activate All Jobs</button>
             {   
                 jobs?.map((item : jobType) => (
                     <CronJobCard 
