@@ -13,3 +13,5 @@ addJob("https://jsonplaceholder.typicode.com/posts/1", "PUT", "*/4 * * * *", "Eu
 
 // Every 5 minutes - DELETE
 addJob("https://jsonplaceholder.typicode.com/posts/1", "DELETE", "*/5 * * * *", "Europe/Lisbon")
+
+// every 2 seconds: */2 * * * * *

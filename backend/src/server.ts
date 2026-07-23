@@ -4,6 +4,7 @@ import cors from "cors";
 import {db} from "./db";
 import { activateAllJob, activateJob, deActivateJob } from "./logic/activation-logic";
 import { deleteJob, searchJob, addJob, editJob } from "./logic/crud-logic";
+import { logList } from "./scheduledJobs";
 
 dotenv.config();
 
@@ -105,6 +106,22 @@ app.get("/activate-all", async (req, res) => {
   if (r) return res.status(200).send();
   else return res.status(500).send();
 })
+
+
+// sends log messages
+app.get("/logs/stream", async (req, res) => {
+  // mandatory for Server-Sent Events (SSE)
+  res.setHeader("Content-Type", "text/event-stream"); // specifies the SSE type of route
+  res.setHeader("Cache-Control", "no-cache"); // tells browser to not keep cache of this 
+  res.setHeader("Connection", "keep-alive"); // tells browser to keep route open
+
+  // keep a reference to this connection so other code can push to it
+  logList.add(res);
+
+  req.on("close", () => {
+    logList.delete(res); // removes res when tab's closed
+  });
+});
 
 
 async function setServer () {

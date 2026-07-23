@@ -1,7 +1,18 @@
-import { scheduledJobs } from "../scheduledJobs";
+import { scheduledJobs, logList } from "../scheduledJobs";
+import type { LogEntry } from "../scheduledJobs";
 import cron from "node-cron";
 import { db } from "../db";
 import { searchJob } from "./crud-logic";
+
+
+// TEMPORARY PLACEMENT
+// takes 1 log and pushes it to the browser
+// anything that we .write() travels to the browser
+function broadcastLog(entry : LogEntry) {
+    for (const log of logList) {
+        log.write(`data: ${JSON.stringify(entry)}\n\n`); // SSE message format
+    }
+}
 
 
 // function to create a new cron job
@@ -20,6 +31,8 @@ export async function jobCreation (id : number ) {
         console.log("Oh no, error at fetching cron data - reported at jobCreation");
     }
 
+
+    // actual cron job
     const task = cron.schedule(data.schedule, async () => {
         try {
             const response = await fetch(data.uri, {
@@ -30,6 +43,9 @@ export async function jobCreation (id : number ) {
             });
 
             console.log(`Job ${id} completed - status: ${response.status}`);
+
+            // saves the log being sent 
+            broadcastLog({ jobId: id, message: "Job ran successfully", timestamp: new Date() });
         } catch (err) {
             console.error({error: `Oh no, there was an jobCreation ${id} - ${err}`})
         }
