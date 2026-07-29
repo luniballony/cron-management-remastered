@@ -12,6 +12,12 @@ export type jobType = {
     updated_at : string
 }
 
+export type LogEntry = {
+    jobId: number;
+    message: string;
+    timestamp: string; 
+};
+
 function useJobs() {
     const [jobs, setJobs] = useState<jobType[]>([]);
     const [job, setJob] = useState<jobType | null >(null);
