@@ -30,12 +30,6 @@ function View () {
         return () => eventSource.close();
     }, []);
 
-
-    useEffect(() => {
-        logs.map((log) => {
-            console.log(log)
-        });
-    }, [logs])
     
     if(!job || !job.id) {
         console.log(`Oh no, we couldnt retrieve job with id ${id}`);
@@ -46,8 +40,11 @@ function View () {
         <>{`You're viewing job with the id: ${job.id}`}
             <CronJobCard key = {job.id} job={job} onDelete={handleDelete} onStatusChange={() => fetchUniqueJob(Number(id))}/>
             <a href={`/edit/${id}`} >Edit</a>
-            <div className="bg-gray-100 m-4 rounded-md">
+            <div className="bg-gray-100 m-4 rounded-md h-100 overflow-y-auto">
             {
+                job.is_active === false ?
+                <>This job inst active</>
+                : 
                 logs
                     .filter((log) => 
                         log.jobId === job.id
