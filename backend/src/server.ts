@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import {db} from "./db";
-import { activateAllJob, activateJob, deActivateJob } from "./logic/activation-logic";
+import { activateAllJob, activateJob, deActivateJob, startAllJobs } from "./logic/activation-logic";
 import { deleteJob, searchJob, addJob, editJob } from "./logic/crud-logic";
 import { logList } from "./scheduledJobs";
 
@@ -74,7 +74,7 @@ app.delete("/delete/:id", async (req, res) =>{
 app.put("/edit/:id", async (req, res) => {
   const id = Number(req.params.id)
   const {uri, body, schedule, http_method, timezone } = req.body;
-
+  
   const editedJob = await editJob(id, uri, http_method, body, schedule, timezone);
 
   return res.status(200).json(editedJob);
@@ -125,7 +125,7 @@ app.get("/logs/stream", async (req, res) => {
 
 
 async function setServer () {
-  await activateAllJob();  
+  await startAllJobs();  
   }
 
 setServer()

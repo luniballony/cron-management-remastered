@@ -43,9 +43,10 @@ export async function jobCreation (id : number ) {
             });
 
             console.log(`Job ${id} completed - status: ${response.status}`);
+            console.log('body value:', JSON.stringify(data.body), 'type:', typeof data.body);
 
             // saves the log being sent 
-            broadcastLog({ jobId: id, message: "Job ran successfully", timestamp: new Date() });
+            broadcastLog({ jobId: id, message: `completed - status: ${response.status}`, timestamp: new Date() });
         } catch (err) {
             console.error({error: `Oh no, there was an jobCreation ${id} - ${err}`})
         }
@@ -57,9 +58,27 @@ export async function jobCreation (id : number ) {
   }
 }
 
+// this function is called at the start of the server to activate all jobs 
+export async function startAllJobs() {
+        try {
+        const result =  await db.query (
+            "SELECT * FROM cron_job WHERE is_active = 't'"
+        );
+
+        for (const job of result.rows) {
+            await jobCreation(job.id);
+        }
+
+        console.log(`Started ${result.rows.length} jobs - reported at StartAllJobs`);
+        return true;
+    } catch (err) {
+        console.error({error: `Oh no, error at starting all jobs: ${err}`});
+        return false;
+    }
+}
 
 
-// function to activate a job 
+// function to activate a single specific job 
 export async function activateJob(id: number) {
     if(scheduledJobs.has(id)) {
         console.log(`The cron job with id ${id} is already active - reported at activate job`);
@@ -117,7 +136,7 @@ export async function deActivateJob(id: number) {
 
 
 
-// this function is called at the start of the server to activate all jobs 
+// this function is called to set all jobs from active: false to active: true
 export async function activateAllJob () {
     try {
         const result =  await db.query (
