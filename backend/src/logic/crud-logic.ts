@@ -12,6 +12,7 @@ export async function addJob (uri : string, method : string, schedule : string, 
 
     if(!result) {
       console.log(`Error at adding a new job to the database`);
+      return;
     }
 
     jobCreation(result.rows[0].id);
@@ -24,6 +25,7 @@ export async function addJob (uri : string, method : string, schedule : string, 
 
     if(!result) {
       console.log("Error at adding a new job to the db");
+      return;
     }
 
     jobCreation(result.rows[0].id);
