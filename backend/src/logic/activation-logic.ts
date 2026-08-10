@@ -29,6 +29,7 @@ export async function jobCreation (id : number ) {
 
     if(!data) {
         console.log("Oh no, error at fetching cron data - reported at jobCreation");
+        return;
     }
 
 
@@ -43,16 +44,17 @@ export async function jobCreation (id : number ) {
             });
 
             console.log(`Job ${id} completed - status: ${response.status}`);
-            console.log('body value:', JSON.stringify(data.body), 'type:', typeof data.body);
 
             // saves the log being sent 
             broadcastLog({ jobId: id, message: `completed - status: ${response.status}`, timestamp: new Date() });
         } catch (err) {
+            broadcastLog({ jobId: id, message: `ERROR - status: ${err}`, timestamp: new Date() });
             console.error({error: `Oh no, there was an jobCreation ${id} - ${err}`})
         }
     });
 
-    scheduledJobs.set(id, task);   
+    scheduledJobs.set(Number(id), task);   
+    console.log(`Current jobs in map: ${scheduledJobs.size}`)
   } catch (err) {
     console.error({error: `failed at creating a job with id ${id}`, err})
   }
@@ -108,6 +110,7 @@ export async function activateJob(id: number) {
 
 export async function deActivateJob(id: number) {
     try {
+        console.log("starting deactivation sequence")
         const result = await db.query(
             "UPDATE cron_job SET is_active = 'f', updated_at = NOW() WHERE id = $1 RETURNING *",
             [id]
@@ -118,18 +121,18 @@ export async function deActivateJob(id: number) {
             return false;
         }
 
-        // only stop/cleanup the in-memory task if it's actually scheduled
+        // stop/cleanup the in-memory task if it's actually scheduled
         const task = scheduledJobs.get(id);
         if (task) {
             task.stop();
             task.destroy();
-            scheduledJobs.delete(id);
+            task.delete();
         }
 
         console.log(`Set job with id ${id} to not active - reported at deActivateJob`);
         return true;
     } catch (err) {
-        console.error({ error: `Oh no, couldn't find job with id: ${id} - ${err}` });
+        console.error({ error: `Oh no, couldn't find job with id: ${id} - ${err} - reported at DeActivatioJob` });
         return false;
     }
 }

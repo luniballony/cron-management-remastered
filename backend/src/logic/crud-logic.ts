@@ -36,12 +36,15 @@ export async function addJob (uri : string, method : string, schedule : string, 
 // currently updates all sections, even if they are the same
 export async function editJob(id : number, uri? : string, httpMethod? : string, body? : string, schedule? : string, timezone? : string  ) {
     // first deactivate job if its active
-    if (scheduledJobs.has(id)) deActivateJob(id);
+
+    await deActivateJob(id);
         
+    const savedBody = body === "" ? null : body;
+
     try {
         const result =  await db.query (
             "UPDATE cron_job SET uri = $2, http_method = $3, body = $4, schedule = $5, timezone = $6, updated_at = NOW() WHERE id = $1 RETURNING *",
-            [id, uri, httpMethod, body, schedule, timezone]
+            [id, uri, httpMethod, savedBody, schedule, timezone]
         );
 
         if (result.rowCount === 0) {
@@ -50,7 +53,7 @@ export async function editJob(id : number, uri? : string, httpMethod? : string, 
         }
 
         // activate after being edited job 
-        activateJob(id);
+        await activateJob(id);
         console.log(`Updated cron job with id ${id}`);
     } catch (err) {
         console.error({error: `Oh no, error while editing job with id: ${id} - ${err}`});
