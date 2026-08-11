@@ -83,8 +83,8 @@ export async function startAllJobs() {
 // function to activate a single specific job 
 export async function activateJob(id: number) {
     if(scheduledJobs.has(id)) {
-        console.log(`The cron job with id ${id} is already active - reported at activate job`);
-        return false;
+        console.log(`The cron job with id ${id} is already active. Restarting DeActivation - reported at activate job`);
+        await deActivateJob(id)
     }
 
     try {
@@ -126,7 +126,7 @@ export async function deActivateJob(id: number) {
         if (task) {
             task.stop();
             task.destroy();
-            task.delete();
+            task.delete;
         }
 
         console.log(`Set job with id ${id} to not active - reported at deActivateJob`);

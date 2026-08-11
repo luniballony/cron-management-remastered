@@ -87,7 +87,9 @@ app.get("/activate/:id", async(req, res) =>{
   const r = await activateJob(id);
 
   if (r) return res.status(200).send();
-  else return res.status(500).send();
+  else {
+    console.log("oh no, there was an error while activating the job - reporting at server.ts")
+    return res.status(500).send()};
 })
 
 app.get("/deactivate/:id", async (req, res) => {
@@ -96,7 +98,9 @@ app.get("/deactivate/:id", async (req, res) => {
   const r = await deActivateJob(id);
 
   if (r) return res.status(200).send();
-  else return res.status(500).send();
+  else {
+    console.log("oh no, there was an error while de-activating the job - reporting at server.ts")
+    return res.status(500).send();}
 })
 
 

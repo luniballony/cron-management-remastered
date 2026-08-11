@@ -7,7 +7,7 @@ type JobFormData = {
     uri: string;
     body: string;
     schedule: string;
-    method: string;
+    http_method: string;
     timezone: string;
 };
 
@@ -35,7 +35,7 @@ function EditJob () {
             uri: `${job?.uri}`,
             body: `${job?.body}` ,
             schedule: `${job?.schedule}` ,
-            method: `${job?.http_method}` ,
+            http_method: `${job?.http_method}` ,
             timezone: "GMT+1"
         }
     });
@@ -48,9 +48,11 @@ function EditJob () {
                 uri: job.uri,
                 body: job.body,
                 schedule: job.schedule,
-                method: job.http_method,
+                http_method: job.http_method,
                 timezone: job.timezone
             });
+
+            console.log(job.http_method);
         }
     }, [job, reset]);
 
@@ -89,7 +91,7 @@ function EditJob () {
 
                 <p>{errors.uri?.message}</p>
 
-                <select {...register('method')} >                    
+                <select {...register('http_method')} >                    
                     {methods.map((item) => (
                         <option key={item} value={item}>{item}</option>
                     ))}
