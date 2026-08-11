@@ -13,6 +13,8 @@ function EditJob () {
     const [http_method, setMethod]  = useState("");
     const [timezone, setTimezone] = useState<string>("GMT+1");
 
+    const methods = ['GET', 'PUT', 'DELETE', 'PATCH'];
+
     useEffect (() => {
         if (id) {
             fetchUniqueJob(Number(id));
@@ -56,11 +58,15 @@ function EditJob () {
                     onChange={(e) => setUri(e.target.value)}
                     placeholder="Uri"
                 />
-                <input 
+
+                <select
                     value={http_method}
-                    onChange={(e) => setMethod(e.target.value)}
-                    placeholder="HTTP Method"
-                />
+                    onChange={(e) => setMethod(e.target.value)}>
+                        {methods.map((item) => (
+                                <option key={item} value={item}>{item}</option>
+                            ))}
+                </select>
+
                 <input 
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
