@@ -1,17 +1,20 @@
 import { useParams } from "react-router"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form"
 import useJobs from "../hooks/useJobs";
+
+type JobFormData = {
+    uri: string;
+    body: string;
+    schedule: string;
+    method: string;
+    timezone: string;
+};
 
 function EditJob () {
 
     const { id } = useParams<{id : string}>();
     const {job, fetchUniqueJob } = useJobs();
-
-    const [uri, setUri] = useState("");
-    const [body, setBody] = useState<string | "">("");
-    const [schedule, setSchedule]  = useState("");
-    const [http_method, setMethod]  = useState("");
-    const [timezone, setTimezone] = useState<string>("GMT+1");
 
     const methods = ['GET', 'PUT', 'DELETE', 'PATCH'];
 
@@ -21,24 +24,44 @@ function EditJob () {
         };
     }, [id])
 
-    useEffect(() => {
-        if(job !== null){
-            setUri(job.uri);
-            setSchedule(job.schedule);
-            setMethod(job.http_method);
-            setTimezone(job.timezone);
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+     } = useForm<JobFormData>({
+        defaultValues: {
+            uri: `${job?.uri}`,
+            body: `${job?.body}` ,
+            schedule: `${job?.schedule}` ,
+            method: `${job?.http_method}` ,
+            timezone: "GMT+1"
         }
-    }, [job])
-    
-    function handleSubmit (e : React.FormEvent) {
-        e.preventDefault();
+    });
+
+
+    // allows to re-render component to get the correct values for the input
+    useEffect(() => {
+        if (job) {
+            reset({
+                uri: job.uri,
+                body: job.body,
+                schedule: job.schedule,
+                method: job.http_method,
+                timezone: job.timezone
+            });
+        }
+    }, [job, reset]);
+
+    function onSubmit (data : JobFormData){
         
         fetch(`http://localhost:3000/edit/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({uri, body, schedule, http_method, timezone})
+            body: JSON.stringify(data)
         })
             .then(res => {
                 if (res.status === 200) {
@@ -52,41 +75,61 @@ function EditJob () {
     return (
         <div>
             <div>{`Job ${id}`}</div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <input
-                    value={uri}
-                    onChange={(e) => setUri(e.target.value)}
+                    {...register('uri', 
+                        {required : 'This field is required', 
+                        minLength: {
+                            value: 5,
+                            message: 'You must enster a uri'
+                        }})}
+                    
                     placeholder="Uri"
                 />
 
-                <select
-                    value={http_method}
-                    onChange={(e) => setMethod(e.target.value)}>
-                        {methods.map((item) => (
-                                <option key={item} value={item}>{item}</option>
-                            ))}
+                <p>{errors.uri?.message}</p>
+
+                <select {...register('method')} >                    
+                    {methods.map((item) => (
+                        <option key={item} value={item}>{item}</option>
+                    ))}
                 </select>
 
                 <input 
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
+                    {...register('body')}
                     placeholder="Body"
                 />
+
                 <input 
-                    value={schedule}
-                    onChange={(e) => setSchedule(e.target.value)}
-                    placeholder="Schedule"
+                    {...register('schedule', 
+                        {required : 'This field is required', 
+                        minLength: {
+                            value: 5,
+                            message: 'You must enster a schedule'
+                        }})}
+                    placeholder={job?.schedule}
                 />
+
+                <p>{errors.schedule?.message}</p>
+
                 <input 
-                    value={timezone}
-                    onChange={(e) => setTimezone(e.target.value)}
-                    placeholder="Timezone"
+                    {...register('timezone', 
+                        {required : 'This field is required', 
+                        minLength: {
+                            value: 1,
+                            message: 'You must enster a timezone'
+                        }})}
+                    placeholder={job?.timezone}
                 />
-                <button type="submit"
-                        className="cursor-pointer
-                                    bg-blue-300
-                                    m-4 p-2 rounded-xl
-                        ">Edit Job</button>
+
+                <p>{errors.timezone?.message}</p>
+
+                <button 
+                    type="submit"
+                    className="cursor-pointer
+                                bg-blue-300
+                                m-4 p-2 rounded-xl
+                    ">Edit Job</button>
             </form>
         </div>
     )

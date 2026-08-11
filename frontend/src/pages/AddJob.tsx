@@ -1,24 +1,38 @@
-import { useState } from "react";
 
+import { useForm } from "react-hook-form"
+
+type JobFormData = {
+    uri: string;
+    body: string;
+    schedule: string;
+    method: string;
+    timezone: string;
+};
 
 function AddJob () {
-    const [uri, setUri] = useState("");
-    const [body, setBody] = useState<string | "">("");
-    const [schedule, setSchedule]  = useState("");
-    const [method, setMethod]  = useState("");
-    const [timezone, setTimezone] = useState<string>("GMT+1");
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+     } = useForm<JobFormData>({
+        defaultValues: {
+            timezone: "GMT+1"
+        }
+     });
 
     const methods = ['GET', 'PUT', 'DELETE', 'PATCH'];
 
-    function handleSubmit (e : React.FormEvent) {
-        e.preventDefault();
+    console.log(errors)
+
+    function onSubmit (data : JobFormData) {
         
         fetch("http://localhost:3000/addjob", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({uri, body, schedule, method, timezone})
+            body: JSON.stringify(data)
         })
             .then(res => {
                 if (res.status === 201) {
@@ -31,34 +45,54 @@ function AddJob () {
 
     return(
         <div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <input
-                    value={uri}
-                    onChange={(e) => setUri(e.target.value)}
+                    {...register('uri', 
+                        {required : 'This field is required', 
+                        minLength: {
+                            value: 5,
+                            message: 'You must enster a uri'
+                        }})}
                     placeholder="Uri"
                 />
-                <select
-                    value={method}
-                    onChange={(e) => setMethod(e.target.value)}>
-                        {methods.map((item) => (
-                                <option key={item} value={item}>{item}</option>
-                            ))}
+
+                <p>{errors.uri?.message}</p>
+
+                <select {...register('method')} >
+                    {methods.map((item) => (
+                            <option key={item} value={item}>{item}</option>
+                        ))}
                 </select>
+
                 <input 
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
+                    {...register('body')}
                     placeholder="Body"
                 />
+
                 <input 
-                    value={schedule}
-                    onChange={(e) => setSchedule(e.target.value)}
+                    {...register('schedule', 
+                        {required : 'This field is required', 
+                        minLength: {
+                            value: 5,
+                            message: 'You must enster a schedule'
+                        }})}
                     placeholder="Schedule"
                 />
+
+                <p>{errors.schedule?.message}</p>
+
                 <input 
-                    value={timezone}
-                    onChange={(e) => setTimezone(e.target.value)}
+                    {...register('timezone', 
+                        {required : 'This field is required', 
+                        minLength: {
+                            value: 1,
+                            message: 'You must enster a timezone'
+                        }})}
                     placeholder="Timezone"
                 />
+
+                <p>{errors.timezone?.message}</p>
+
                 <button type="submit">Create New Job</button>
             </form>            
         </div>
