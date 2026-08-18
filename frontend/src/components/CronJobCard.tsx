@@ -5,8 +5,9 @@ const CronJobCard = ({job, onDelete, onStatusChange} : {job : jobType; onDelete:
 
     return (
         <div className="bg-blue-200
-                    m-4 p-2 rounded-xl">
-        <li>
+                    m-4 p-2 rounded-xl
+                    ">
+        <li className="list-none">
             <a href={`/view/${job.id}`}>
                 <div className="">
                     <div className="flex justify-between">
@@ -34,6 +35,7 @@ const CronJobCard = ({job, onDelete, onStatusChange} : {job : jobType; onDelete:
                 className="
                     cursor-pointer
                     bg-blue-500
+                    m-2 p-2 rounded-xl
                 ">Delete</button>
 
                 <ActivateButton key = {job.id} job = {job} onStatusChange={onStatusChange}/>

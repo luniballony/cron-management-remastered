@@ -1,1 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:opsz,wght@0,18..144,300..900&family=Notable&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
 @import "tailwindcss";
+
+@theme {
+    --color-grey: #EEF0F2;
+
+    --color-light-blue: #6399F0;
+    --color-accent-blue: #0D21A1;
+    --color-dark-blue: #011638;
+
+    --color-black: #141414;
+
+
+    /* fonts */
+    --font-merriweather: "Merriweather", serif;
+    --font-notable: "Notable", sans-serif;
+    --font-playfair: "Playfair Display", serif;
+}

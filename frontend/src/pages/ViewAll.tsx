@@ -23,7 +23,9 @@ function ViewAll () {
     }
 
     return (
-        <>You're viewing ALLL the jobs
+        <div
+            
+        >You're viewing ALLL the jobs
             <button 
                 onClick={activateAllJobs}
                 className="bg-gray-200
@@ -35,10 +37,11 @@ function ViewAll () {
                         key = {item.id} 
                         job = {item} 
                         onDelete = {handleDelete} 
-                        onStatusChange = {fetchJobs}/>
+                        onStatusChange = {fetchJobs}
+                    />
                 ))
             }
-        </>
+        </div>
     )
 }
 
