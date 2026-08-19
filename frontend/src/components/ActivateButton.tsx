@@ -30,7 +30,7 @@ const ActivateButton = ({job, onStatusChange} : {job : jobType; onStatusChange: 
     return (
         <div className='
             cursor-pointer
-            text-grey font-notable
+            text-grey font-notable text-[1.2rem]
         '>{
             job.is_active === false 
             ?

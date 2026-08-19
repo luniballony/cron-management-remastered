@@ -37,24 +37,32 @@ function View () {
     }
 
     return (
-        <>{`You're viewing job with the id: ${job.id}`}
-            <CronJobCard key = {job.id} job={job} onDelete={handleDelete} onStatusChange={() => fetchUniqueJob(Number(id))}/>
-            <a href={`/edit/${id}`} >Edit</a>
-            <div className="bg-gray-100 m-4 rounded-md h-100 overflow-y-auto">
-            {
-                job.is_active === false ?
-                <>This job inst active</>
-                : 
-                logs
-                    .filter((log) => 
-                        log.jobId === job.id
-                    )
-                    .map((log, index) => (
-                    <CronJobLog key={index} log = {log} />
-                ))
-            }
+        <div className='bg-grey flex flex-col'>
+            <div className='
+                mx-[24rem]
+            '>
+                <CronJobCard key = {job.id} job={job} onDelete={handleDelete} onStatusChange={() => fetchUniqueJob(Number(id))}/>
+                
+                <div className="
+                    bg-dark-blue my-4 overflow-y-auto h-100
+                ">
+                {
+                    job.is_active === false ?
+                    <p className='
+                        font-bold text-[2rem] font-notable text-center
+                    '>This job ins't active.</p>
+                    : 
+                    logs
+                        .filter((log) => 
+                            log.jobId === job.id
+                        )
+                        .map((log, index) => (
+                        <CronJobLog key={index} log = {log} />
+                    ))
+                }
+                </div>
             </div>
-        </>
+        </div>
     )
 }
 

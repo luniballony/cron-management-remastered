@@ -3,9 +3,14 @@ import type { LogEntry } from "../hooks/useJobs";
 function CronJobLog ({ log }: { log: LogEntry }) {
     return (
         <div className="
-            bg-gray-400 m-1 rounded-md
+            text-grey text-[1.2rem] 
+            mx-[0.5rem] mt-[0.5rem]
+            flex 
         ">
-            [{log.timestamp}] Job {log.jobId}: {log.message}
+            [{log.timestamp}] Job {log.jobId}:
+            <p className='
+                text-bright-yellow
+            '>{log.message}</p>
         </div>
     )
 }
