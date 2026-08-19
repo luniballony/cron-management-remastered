@@ -4,42 +4,76 @@ import ActivateButton from "./ActivateButton";
 const CronJobCard = ({job, onDelete, onStatusChange} : {job : jobType; onDelete: (id : number) => void ; onStatusChange: () => void }) => {
 
     return (
-        <div className="bg-blue-200
-                    m-4 p-2 rounded-xl
-                    ">
+        <div className="
+            bg-light-blue
+            my-4 p-2 
+            text-black
+        ">
         <li className="list-none">
             <a href={`/view/${job.id}`}>
                 <div className="">
                     <div className="flex justify-between">
-                        <p>Job' ID: {job.id}</p>
-                        <div className="flex
-                        ">State: 
+                        <p className='
+                            font-notable text-[1.8rem] text-accent-blue font-bold
+                        '>Job ID: {job.id}</p>
+                        <div className="
+                            flex font-bold 
+                            text-[1.4rem] text-bright-yellow
+                        "> 
                             {(job.is_active == true) 
-                                ? <p className="bg-green-300 rounded-md px-2 ml-1"
-                                > Active</p>
-                                : <p className="bg-red-300 rounded-md px-2 ml-1"
-                                > Not Active</p>
+                                ? <p> Active</p>
+                                : <p className='text-black'> Not Active</p>
                             } 
                         </div>
                     </div>
-                </div>
-                <p>URI: {job.uri}</p>
+                </div>                
             </a>
         </li>
-            <p>Method: {job.http_method}</p>
-            <p>Body: {job.body? job.body : `This job has no body declared.`}</p>
-            <p>Schedule: {job.schedule}</p>
-            <p>Created at: {job.created_at}</p>
+        
+        <div className='flex flex-col '>
+            <div className='
+                flex items-center
+            '>
+                <p className='text-[1.2rem]'>URI:</p>
+                <p>{job.uri}</p>
+            </div>
             
+            <div className='flex items-center'>
+                <p className='text-[1.2rem]'>Method:</p>
+                <p>{job.http_method}</p>
+            </div>
+
+            <div className='flex items-center'>
+                <p className='text-[1.2rem]'>Body: </p>
+                <p>{job.body? job.body : `This job has no body declared.`}</p>
+            </div>
+
+            <div className='flex items-center'>
+                <p className='text-[1.2rem]'>Schedule:</p>
+                <p>{job.schedule}</p>
+            </div>
+
+            <div className='flex items-center'>
+                <p className='text-[1.2rem]'>Created at:</p>
+                <p>{job.created_at}</p>
+            </div>
+
+        </div>
+            
+        <div className='
+            flex justify-evenly
+        '>
             <button onClick={() => onDelete(job.id)}
                 className="
                     cursor-pointer
-                    bg-blue-500
-                    m-2 p-2 rounded-xl
-                ">Delete</button>
+                    bg-accent-blue
+                    px-[4rem] py-[0.2rem]
+                    text-grey font-notable
+            ">Delete</button>
 
-                <ActivateButton key = {job.id} job = {job} onStatusChange={onStatusChange}/>
-        </div>
+            <ActivateButton key = {job.id} job = {job} onStatusChange={onStatusChange}/>
+        </div>               
+    </div>
     )
 }
 

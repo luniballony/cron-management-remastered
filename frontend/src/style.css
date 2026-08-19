@@ -5,10 +5,14 @@
 @theme {
     --color-grey: #EEF0F2;
 
-    --color-bright-yellow: #e5e919;
+    --color-bright-yellow: #ffd500;
+
+    --color-light-blue: #546db1;
     --color-accent-blue: #0D21A1;
     --color-dark-blue: #011638;
 
+    --color-activated: #6a994e;;
+    --color-deactivated: #780000;
     --color-black: #141414;
 
 

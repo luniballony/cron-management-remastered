@@ -23,24 +23,35 @@ function ViewAll () {
     }
 
     return (
-        <div
-            
-        >You're viewing ALLL the jobs
-            <button 
-                onClick={activateAllJobs}
-                className="bg-gray-200
-                            cursor-pointer">
-                    Activate All Jobs</button>
-            {   
-                jobs?.map((item : jobType) => (
-                    <CronJobCard 
-                        key = {item.id} 
-                        job = {item} 
-                        onDelete = {handleDelete} 
-                        onStatusChange = {fetchJobs}
-                    />
-                ))
-            }
+        <div className='
+            bg-grey
+            font-notable
+            flex flex-col
+        '>
+             <div className='
+                mx-[30rem]
+             '>
+                <p className='
+                    text-center
+                    pt-4
+                '>You're viewing all the existing jobs</p>
+                <button onClick={activateAllJobs} className="
+                    bg-accent-blue
+                    text-grey font-notable text-[1.2rem]
+                    cursor-pointer
+                    h-[2rem] w-[10rem]
+                "> Activate All Jobs </button>
+                {   
+                    jobs?.map((item : jobType) => (
+                        <CronJobCard 
+                            key = {item.id} 
+                            job = {item} 
+                            onDelete = {handleDelete} 
+                            onStatusChange = {fetchJobs}
+                        />
+                    ))
+                }
+            </div>
         </div>
     )
 }

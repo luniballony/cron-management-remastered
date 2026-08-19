@@ -28,16 +28,19 @@ const ActivateButton = ({job, onStatusChange} : {job : jobType; onStatusChange: 
     }
 
     return (
-        <div>{
+        <div className='
+            cursor-pointer
+            text-grey font-notable
+        '>{
             job.is_active === false 
             ?
                 <button onClick={handleActivation} className="
-                    bg-green-500
-                    cursor-pointer
+                    w-[14rem] h-[2rem]
+                    bg-activated
                 ">Activate</button>
             :  <button onClick={handleDeActivation} className="
-                    bg-red-400
-                    cursor-pointer
+                    w-[14rem] h-[2rem]
+                    bg-deactivated
                 ">De Activate</button>
         }            
         </div>
