@@ -1,19 +1,20 @@
 const NavBar = () => {
     return (
         <div className="
-            bg-blue-50
+            bg-light-blue
             border-b
             p-3
             flex justify-around
+            text-black font-notable text-[1.2rem]
         ">
             <li className="list-none">
-                <a href="/">Home</a></li>
+                <a href="/">HOME</a></li>
             <li className="list-none">
-                <a href="/view-all">View Jobs</a></li>
+                <a href="/view-all">VIEW JOBS</a></li>
             <li className="list-none">
-                <a href="/addjob">Create New Job</a></li> 
+                <a href="/addjob">CREATE NEW JOB</a></li> 
             <li className="list-none">
-                <a href="/about">About</a></li>
+                <a href="/about">ABOUT</a></li>
         </div>
     )
 }
