@@ -1,7 +1,7 @@
 const NavBar = () => {
     return (
         <div className="
-            bg-light-blue
+            bg-bright-yellow
             border-b
             p-3
             flex justify-around
