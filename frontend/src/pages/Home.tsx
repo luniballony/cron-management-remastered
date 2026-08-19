@@ -1,7 +1,7 @@
 function Home () {
     return (
         <div className="bg-accent-blue
-            h-full flex flex-col
+            flex flex-col h100
             py-[8rem]
         ">  
             <div className ="flex flex-col

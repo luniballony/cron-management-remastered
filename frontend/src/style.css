@@ -16,4 +16,7 @@
     --font-merriweather: "Merriweather", serif;
     --font-notable: "Notable", sans-serif;
     --font-playfair: "Playfair Display", serif;
+
+    /* space between letters in footer */
+    --tracking-footer: -2px
 }

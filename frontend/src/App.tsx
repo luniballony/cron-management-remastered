@@ -4,14 +4,19 @@ import Footer from './components/Footer'
 
 function App() {
   return (
-    <div className="h-screen flex flex-col">
-      <NavBar />
+    <div className="min-h-screen flex flex-col">
+      <div className="grow-0 shrink-0 basis-auto">
+        <NavBar />
+      </div>
 
-      <div className="flex-1 overflow-auto">
+      <div className="grow-1 shrink-0 basis-auto overflow-auto">
         <AppRouter />
       </div>
 
-      <Footer />
+      <div className="grow-0 shrink-0 basis-auto">
+        <Footer />  
+      </div>
+
     </div>
   )
 }
