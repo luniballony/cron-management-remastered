@@ -37,28 +37,28 @@ const CronJobCard = ({job, onDelete, onStatusChange} : {job : jobType; onDelete:
                 <div className='
                     flex items-center
                 '>
-                    <p className='text-[1.2rem]'>URI:</p>
-                    <p>{job.uri}</p>
+                    <p className='text-[1.4rem]'>URI:</p>
+                    <p className='text-[1.2rem] pl-[0.5rem]'>{job.uri}</p>
                 </div>
                 
                 <div className='flex items-center'>
-                    <p className='text-[1.2rem]'>Method:</p>
-                    <p>{job.http_method}</p>
+                    <p className='text-[1.4rem]'>Method:</p>
+                    <p className='text-[1.2rem] pl-[0.5rem]'>{job.http_method}</p>
                 </div>
 
                 <div className='flex items-center'>
-                    <p className='text-[1.2rem]'>Body: </p>
-                    <p>{job.body? job.body : `This job has no body declared.`}</p>
+                    <p className='text-[1.4rem]'>Body: </p>
+                    <p className='text-[1.2rem] pl-[0.5rem]'>{job.body? job.body : `This job has no body declared.`}</p>
                 </div>
 
                 <div className='flex items-center'>
-                    <p className='text-[1.2rem]'>Schedule:</p>
-                    <p>{job.schedule}</p>
+                    <p className='text-[1.4rem]'>Schedule:</p>
+                    <p className='text-[1.2rem] pl-[0.5rem]'>{job.schedule}</p>
                 </div>
 
                 <div className='flex items-center'>
-                    <p className='text-[1.2rem]'>Created at:</p>
-                    <p>{job.created_at}</p>
+                    <p className='text-[1.4rem]'>Created at:</p>
+                    <p className='text-[1.2rem] pl-[0.5rem]'>{job.created_at}</p>
                 </div>
 
             </div>

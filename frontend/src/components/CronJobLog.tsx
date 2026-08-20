@@ -9,7 +9,7 @@ function CronJobLog ({ log }: { log: LogEntry }) {
         ">
             [{log.timestamp}] Job {log.jobId}:
             <p className='
-                text-bright-yellow
+                text-bright-yellow pl-[0.5rem]
             '>{log.message}</p>
         </div>
     )

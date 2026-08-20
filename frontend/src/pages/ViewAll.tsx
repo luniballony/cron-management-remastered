@@ -28,19 +28,24 @@ function ViewAll () {
             font-notable
             flex flex-col
         '>
-             <div className='
-                mx-[30rem]
-             '>
-                <p className='
-                    text-center
-                    pt-4
-                '>You're viewing all the existing jobs</p>
+            <p className='
+                text-center
+                pt-4
+            '>You're viewing all the existing jobs</p>
+            
+            <div className="flex justify-center">
                 <button onClick={activateAllJobs} className="
                     bg-accent-blue
                     text-grey font-notable text-[1.2rem]
                     cursor-pointer
                     h-[2rem] w-[10rem]
                 "> Activate All Jobs </button>
+            </div>
+            
+
+            <div className='
+                mx-[30rem]
+            '>
                 {   
                     jobs?.map((item : jobType) => (
                         <CronJobCard 
