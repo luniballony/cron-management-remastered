@@ -75,63 +75,111 @@ function EditJob () {
     }
     
     return (
-        <div>
-            <div>{`Job ${id}`}</div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input
-                    {...register('uri', 
-                        {required : 'This field is required', 
-                        minLength: {
-                            value: 5,
-                            message: 'You must enster a uri'
-                        }})}
-                    
-                    placeholder="Uri"
-                />
+        <div className='
+            bg-grey
+        '>
+            <div className="
+                py-[0.5rem]
+                text-center text-[3rem] 
+                font-bold font-notable
+            ">{`Job ${id}`}</div>
 
-                <p>{errors.uri?.message}</p>
+            <form onSubmit={handleSubmit(onSubmit)} className='
+                bg-accent-blue [&>*]:p-[0.5rem]
+                mx-[30rem] p-[0.6rem]
+                flex flex-col 
+                text-grey text-[1.2rem] font-notable
+            '>
+                <div className="
+                    flex w-full items-center
+                ">
+                    <label className="
+                        shrink-0
+                    ">URI:</label>
+                    <input
+                            {...register('uri', 
+                                {required : 'This field is required!', 
+                                minLength: {
+                                    value: 5,
+                                    message: 'You must enster an uri'
+                                }})}
+                            
+                            placeholder={job?.uri}
+                            className='bg-dark-blue w-[90%] flex-1 pl-[0.5rem] ml-[0.5rem]'
+                        />
+                </div>
+                <p className="
+                    text-bright-yellow
+                ">{errors.uri?.message}</p>
+                
+                <div className="flex w-full items-center">
+                    <label className='shrink-0' >METHOD: </label>
+                    <select {...register('http_method')} className='
+                            bg-dark-blue w-40
+                            text-center flex-1
+                            ml-[0.5rem] py-[0.2rem]
+                        '>                    
+                            {methods.map((item) => (
+                                <option key={item} value={item}>{item}</option>
+                            ))}
+                        </select>
+                </div>
+                
+                <div className="flex w-full items-center">
+                    <label className="shrink-0">BODY: </label>
+                    <input  {...register('body')} placeholder="Insert body..." className='
+                        bg-dark-blue w-100 flex-1 
+                        pl-[0.5rem] ml-[0.5rem]
+                    '/>
+                </div>
+                
+                <div className="flex w-full items-center">
+                    <label className="shrink-0"> SCHEDULE: </label>
+                    <input 
+                        {...register('schedule', 
+                            {required : 'This field is required', 
+                            minLength: {
+                                value: 5,
+                                message: 'You must enster a schedule'
+                            }})}
+                        placeholder={job?.schedule}
+                        className='
+                            bg-dark-blue w-100 flex-1 
+                            pl-[0.5rem] ml-[0.5rem]
+                    '/>
+                </div>
+                
 
-                <select {...register('http_method')} >                    
-                    {methods.map((item) => (
-                        <option key={item} value={item}>{item}</option>
-                    ))}
-                </select>
+                <p className="
+                    text-bright-yellow
+                ">{errors.schedule?.message}</p>
+                
+                <div className="flex w-full items-center">
+                    <label className="
+                        shrink-0
+                    ">TIMEZONE: </label>
+                    <input 
+                        {...register('timezone', 
+                            {required : 'This field is required', 
+                            minLength: {
+                                value: 1,
+                                message: 'You must enster a timezone'
+                            }})}
+                        placeholder={job?.timezone}
+                        className='bg-dark-blue w-100 flex-1 
+                            pl-[0.5rem] ml-[0.5rem] 
+                        '/>
+                </div>
 
-                <input 
-                    {...register('body')}
-                    placeholder="Body"
-                />
+                <p className="
+                    text-bright-yellow
+                ">{errors.timezone?.message}</p>
 
-                <input 
-                    {...register('schedule', 
-                        {required : 'This field is required', 
-                        minLength: {
-                            value: 5,
-                            message: 'You must enster a schedule'
-                        }})}
-                    placeholder={job?.schedule}
-                />
-
-                <p>{errors.schedule?.message}</p>
-
-                <input 
-                    {...register('timezone', 
-                        {required : 'This field is required', 
-                        minLength: {
-                            value: 1,
-                            message: 'You must enster a timezone'
-                        }})}
-                    placeholder={job?.timezone}
-                />
-
-                <p>{errors.timezone?.message}</p>
-
-                <button 
-                    type="submit"
-                    className="cursor-pointer
-                                bg-blue-300
-                                m-4 p-2 rounded-xl
-                    ">Edit Job</button>
+                <button  type="submit" className="
+                    cursor-pointer m-[0.5rem]
+                    bg-bright-yellow 
+                    text-black font-bold text-[1.6rem]
+                ">Edit Job</button>
             </form>
         </div>
     )

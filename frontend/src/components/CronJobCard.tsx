@@ -31,7 +31,9 @@ const CronJobCard = ({job, onDelete, onStatusChange} : {job : jobType; onDelete:
                 </a>
             </li>
             
-            <div className='flex flex-col '>
+            <div className='
+                flex flex-col 
+            '>
                 <div className='
                     flex items-center
                 '>
