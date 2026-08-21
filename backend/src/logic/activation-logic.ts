@@ -20,10 +20,10 @@ export async function jobCreation (id : number ) {
   try {
     console.log(`Starting job ${id}`)
 
-    if (scheduledJobs.has(id)) {
-        console.log(`Job ${id} already active - reported at createnewjob`);
-        return;
-    }
+    // if (scheduledJobs.has(id)) {
+    //     console.log(`Job ${id} already active - reported at createnewjob`);
+    //     return;
+    // }
 
     const data = await searchJob(id);
 
@@ -62,7 +62,7 @@ export async function jobCreation (id : number ) {
 
 // this function is called at the start of the server to activate all jobs 
 export async function startAllJobs() {
-        try {
+    try {
         const result =  await db.query (
             "SELECT * FROM cron_job WHERE is_active = 't'"
         );
@@ -82,13 +82,15 @@ export async function startAllJobs() {
 
 // function to activate a single specific job 
 export async function activateJob(id: number) {
-    if(scheduledJobs.has(id)) {
-        console.log(`The cron job with id ${id} is already active. Restarting DeActivation - reported at activate job`);
-        await deActivateJob(id)
-    }
+    // if(scheduledJobs.has(id)) {
+    //     console.log(`The cron job with id ${id} is already active. Restarting DeActivation - reported at activate job`);
+    //     await deActivateJob(id)
+    // }
+    // doesnt try to find it, simply deletes
+    await deActivateJob(id);
 
     try {
-        const result =  await db.query (
+        const result = await db.query (
             "UPDATE cron_job SET is_active = 't', updated_at = NOW() WHERE id = $1 RETURNING *",
             [id]
         );
@@ -143,7 +145,7 @@ export async function deActivateJob(id: number) {
 export async function activateAllJob () {
     try {
         const result =  await db.query (
-            "SELECT * FROM cron_job"
+            "SELECT * FROM cron_job WHERE is_active = 'f'"
         );
 
         for (const job of result.rows) {
